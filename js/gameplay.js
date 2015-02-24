@@ -409,10 +409,9 @@ function endGame(){
 		HighScoreForm.append($("<input />",{type:'hidden',id:"user_score",value:nTurns}));
 		HighScoreForm.append($("<input />",{type:'hidden',id:"game_id",value:window.GameID}));
 		
-		var submitScoreButton = $("<input />",{type:'submit',value:"Send In Score!"});
+		var submitScoreButton = $("<input />",{type:'button',value:"Send In Score!"});
 		submitScoreButton.click(function(){
 			submitScore( $("#person").val(), $("#user_score").val(), $("#game_id").val() );
-			location.reload();
 		})
 		
 		HighScoreForm.append( submitScoreButton );

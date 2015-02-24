@@ -11,9 +11,9 @@
 	<link rel="apple-touch-icon" href="/~ssarsfie/img/favicon.png">
 	
 	<!--GAME SCRIPT-->	
-	<script src="js/deque.js"></script>
-	<script src="js/gameplay.js"></script>
-	<script src="js/leaderboard.js"></script>
+	<script src="js/deque.js?v=1"></script>
+	<script src="js/gameplay.js?v=1"></script>
+	<script src="js/leaderboard.js?v=1"></script>
 
 	<title> Scott Mathias Sarsfield's Web Site </title>
 </head>

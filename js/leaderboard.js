@@ -22,9 +22,6 @@ function getLeaderboard(){
 				var json = JSON.parse(data);
 				//console.log(json);
 				updateLeaderboard(json);
-			},
-			505:function(){
-				console.err("Save Failed.");
 			}
 		}
 		
@@ -49,6 +46,16 @@ function submitScore(name,score,code){
 				var json = JSON.parse(data);
 				//console.log(json);
 				updateLeaderboard(json);
+				
+				// temp fix
+				//location.reload();
+				//alert("Save Sent.");
+				$("#gamescreen").remove();
+				window.GameID++;
+			},
+			505:function(){
+				alert("Save Failed.");
+				$("#gamescreen").remove();
 			}
 		}
 		
