@@ -13,8 +13,7 @@
 	<!--GAME SCRIPT-->	
 	<script src="js/deque.js"></script>
 	<script src="js/gameplay.js"></script>
-	<?php include 'lb.php';?>
-	<?php addJava();?>
+	<script src="js/leaderboard.js"></script>
 
 	<title> Scott Mathias Sarsfield's Web Site </title>
 </head>
@@ -48,13 +47,19 @@
 		<div id="leaderboard" class="content">
 			<h3 class="classy">Leaderboard</h3>
 			<div id="rankings">
-				<?php printTable();?>
 			</div>
 		</div>
 		
 		
 	
 	</div></div>
+	
+	<script>
+		window.GameID = <?php echo rand(); ?>;
+		$(document).ready(function(){
+			$("#leaderboard #rankings").append( renderLeaderboard() );
+		});
+	</script>
 
 <?php
 	include $__prefix.'inc/footer.php';

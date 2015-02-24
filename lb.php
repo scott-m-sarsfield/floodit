@@ -1,6 +1,47 @@
 <?php
 
+//------------------------------------------------------
+// GLOBALS
+
 $nLeaders = 10;
+$Leaders;
+$LeaderFile = "leaders.json";
+
+
+//------------------------------------------------------
+// READ / WRITE
+
+function readJSONFile(){
+	global $LeaderFile;
+	$contents = file_get_contents($LeaderFile);
+	$data = json_decode($contents,true);
+	return $data;
+}
+
+function writeJSONFile($contents){
+	global $LeaderFile;
+	$str = json_encode($contents,JSON_PRETTY_PRINT);
+	$worked = file_put_contents($LeaderFile,$str);
+	if(!$worked){ http_response_code(505); }
+	else{ echo $str; }
+	return;	
+}
+
+
+
+//------------------------------------------------------
+// RETRIEVAL
+
+function getLeaders(){
+	$leaders = readJSONFile();
+	echo json_encode( $leaders );
+	
+	return;
+}
+
+
+//------------------------------------------------------
+// EDITING
 
 // Leader Class
 class leader{
@@ -10,68 +51,36 @@ class leader{
 		$this->rank = $rank;
 		$this->code = $code;
 	}
-}
-
-// Declaration of Leader variable.
-
-$Leaders;
+};
 
 // Load Leaders
 function loadLeaders(){
 
 	global $Leaders,$nLeaders;
 
-	$leaderFile = fopen("leaders.txt",'r');
+	$leaders = readJSONFile();
 
-	$leaderString = "";
-
-	while(!feof($leaderFile)){
-		$buffer = fread($leaderFile,50);
-		//echo $buffer;
-		$leaderString = $leaderString.$buffer;
-		$buffer = "";
-	}
-
-	fclose($leaderFile);
-
-	$leaders = explode("#@#",$leaderString);
-
+	$lead_arr = $leaders["leaders"];
+	//print_r($leaders);
 	for($i = 0; $i < $nLeaders; $i++){
-		$Leaders[$i] = new leader($leaders[4*$i+1],
-						$leaders[4*$i+2],
-						$leaders[4*$i],
-						$leaders[4*$i+3]);
+		
+		$obj = array("name"=>"","score"=>"","rank"=>$i,"code"=>"");
+		if(isset($lead_arr[$i])){ $obj = $lead_arr[$i]; }
+		
+		$Leaders[$i] = new leader(
+						$obj["name"],
+						$obj["score"],
+						$obj["rank"],
+						$obj["code"]);
 	}
+	//print_r($Leaders);
 }
-
-loadLeaders();
-
-// Ability to add a leader.
-if(isset($_POST['person'])){
-	$newLead = new leader($_POST['person'],$_POST['score'],$nLeaders+1,$_POST['code']);
-	
-	//print_r($_POST);
-	$good = true;	
-	foreach($Leaders as $lead){
-		if(!($lead->code - $newLead->code)) $good = false;
-	}
-	if ($good) $Leaders[$nLeaders-1] = $newLead;
-
-	$_POST['score'] = 100;
-}
-
-saveLeaders();
-
 
 // Comparator for Ranking
 function cmpScore($a,$b){
 	if ($a->score == "") return 1;
 	if ($b->score == "") return -1;
 	if($a->score == $b->score){
-		// Birthday Gimmic
-		if($a->person == "Lisa") return -1;
-		if($b->person == "Lisa") return 1;
-
 		return ($a->rank < $b->rank)? -1:1;
 	}
 	return ($a->score < $b->score)? -1:1;
@@ -82,63 +91,65 @@ function saveLeaders(){
 	global $Leaders,$nLeaders;
 
 	uasort($Leaders,'cmpScore');
-
-	$leaderFile = fopen('leaders.txt','w');
+	
+	$saveObj = array();
+	$saveObj["leaders"] = array();
 
 	$i = 1;
 	foreach($Leaders as $lead){
 		if ($i == $nLeaders+1) break;
-		$leadText = ($i++)."#@#".$lead->person."#@#".$lead->score."#@#".$lead->code."#@#";
-		fwrite($leaderFile,$leadText);
+		$saveObj["leaders"][] = array("rank"=>($i++),
+										"name"=>$lead->person,
+										"score"=>$lead->score,
+										"code"=>$lead->code);
 	}
-	fclose($leaderFile);
 
 	unset($Leaders);
+	
+	writeJSONFile($saveObj);
 
 	loadLeaders();
 }
 
-
-
-// Printables
-
-function printTable(){
-
+function worstScore(){
 	global $Leaders,$nLeaders;
+	//return ($Leaders[$nLeaders-1]->score == "")? 100:$Leaders[$nLeaders-1]->score;
+	return 100;
+}
 
-	$i = 1;
-	echo "<table>";
-	echo "<tr><th>Rank</th><th>Name</th><th>Score</th></tr>";
-	for($i = 1;$i <= $nLeaders; $i++){
-		$lead = $Leaders[$i-1];
-		echo "<tr>";
-		echo "<td class='rank'>".($i)."</td>";
-		echo "<td class='name'>".$lead->person."</td>";
-		echo "<td class='score'>".$lead->score."</td>";
-		echo "</tr>";
+function submitScore(){
+	global $Leaders,$nLeaders;
+	
+	$candidate = new leader(
+					$_POST['name'],
+					$_POST['score'],
+					11,
+					$_POST['code']);
+					
+	loadLeaders();
+	
+	// Check unique code.
+	$good = true;	
+	foreach($Leaders as $lead){
+		if($lead->code == $candidate->code) $good = false;
 	}
-	echo "</table>";	
+	if ($good) $Leaders[$nLeaders-1] = $candidate;
+	
+	saveLeaders();
+	
 }
 
-function printSubmit(){
-	echo "var HighScoreForm = '';";
-	echo "HighScoreForm += \"<form action='#' method='post'>\";";
-	echo "HighScoreForm += \"<input type='text' name='person' />\";";
-	echo "HighScoreForm += \"<input type='hidden' id='user_score' value='9000' name='score' />\";";
-	echo "HighScoreForm += \"<input type='hidden' value='".rand()."' name='code' />\";";
-	echo "HighScoreForm += \"<input type='submit' value='Send In Score!' /></form>\";";
-}
 
-function addJava(){
+//------------------------------------------------------
+// FUNCTION DIRECTORY
 
-	global $Leaders,$nLeaders;
+$function = "";
 
-	$mS = ($Leaders[$nLeaders-1]->score == "")? 100:$Leaders[$nLeaders-1]->score;
+if(isset($_POST['function'])){ $function = $_POST['function']; }
 
-	echo "<script type='text/javascript'>";
-	echo "maxScore = ".$mS.";";
-	printSubmit();
-	echo "</script>";
-}
+if($function == 'get_leaders'){	getLeaders(); }
+if($function == 'submit_score'){ submitScore(); }
+
+
 
 ?>

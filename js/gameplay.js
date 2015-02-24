@@ -391,21 +391,35 @@ function endGame(){
 	// Add HTML for the Results div.
 	$('#gs_display').append('<div id="gs_results"></div>');
 	
-	var addText = "";
-	addText += "<br /><h1>You Win!</h1><br /><h2>It took you <span id='num'>";
-	addText += nTurns + " ";
-	addText += "</span> turns.</h2>";
+	var x = $("#gs_results");
+	
+	x.append( $("<br />"),
+				$("<h1 />",{text:"You Win!"}),
+				$("<br />"),
+				$("<h2 />",{text:"It took you "+nTurns+" turns."})
+			);
+	
 
 	// High Score Option
 	if(nTurns < maxScore){
-		addText+=HighScoreForm;
+			
+		var HighScoreForm = $("<div />");
+		
+		HighScoreForm.append($("<input />",{type:'text',id:'person'}));
+		HighScoreForm.append($("<input />",{type:'hidden',id:"user_score",value:nTurns}));
+		HighScoreForm.append($("<input />",{type:'hidden',id:"game_id",value:window.GameID}));
+		
+		var submitScoreButton = $("<input />",{type:'submit',value:"Send In Score!"});
+		submitScoreButton.click(function(){
+			submitScore( $("#person").val(), $("#user_score").val(), $("#game_id").val() );
+			location.reload();
+		})
+		
+		HighScoreForm.append( submitScoreButton );
+		
+		x.append( HighScoreForm );
 		activeKeys = false;
 	}
-
-
-	$('#gs_results').html(addText); // adds the HTML
-
-	$('#user_score').val(nTurns);   // updates hidden input
 	
 
 	// Establish Margins of the Results div.
