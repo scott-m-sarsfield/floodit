@@ -1,4 +1,9 @@
-<?php include '../inc/doc_header.php';?>
+<?php 
+	$__global = "/DCNFS/users/web/pages/ssarsfie/";
+	$__local = "../";
+	$__prefix = $__global;
+	include $__prefix.'inc/doc_header.php';
+?>
 	<link rel="stylesheet" href="/~ssarsfie/css/standard_gs_styles.css">
 	<link rel="stylesheet" href="css/styles.css">
 
@@ -14,7 +19,7 @@
 	<title> Scott Mathias Sarsfield's Web Site </title>
 </head>
 <body>
-	<?php include '../inc/header.php';?>
+	<?php include $__prefix.'inc/header.php';?>
 	
 	<div class="page-title">
 		<span>Flood It</span>
@@ -51,4 +56,6 @@
 	
 	</div></div>
 
-<?php include '../inc/footer.php';?>
+<?php
+	include $__prefix.'inc/footer.php';
+ ?>
