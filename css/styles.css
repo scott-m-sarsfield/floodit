@@ -1,0 +1,89 @@
+#gamescreen{
+	background-color:#000;
+	background-image:url('/~ssarsfie/sherlock/img/gs_sher_back.png');
+	background-repeat:repeat;
+	background-position:center;
+}
+
+#gamescreen *{
+	overflow:hidden;
+}
+
+#gamescreen #counter{	
+	position:absolute;
+	right:15px;
+	top: 15px;
+
+
+	font-size:300%;
+	text-shadow: 3pt 3pt 6pt black;
+	color:#ddd;
+}
+
+/* cutoff */
+
+
+#gs_title{
+	text-align:center;
+	width: 100%;
+	padding: 5px 0px;
+	text-shadow: 3pt 3pt 6pt black;
+}
+
+
+#gs_launch{
+	width: 100%;
+	text-align:center;
+	padding: 10px 0px;
+	
+}
+
+#gs_display{
+	margin:auto;
+	text-align:center;
+	font-size:120%;
+	text-shadow: 2pt 2pt 3pt black;
+	padding-bottom: 20px;
+
+	/*display:none;*/
+}
+
+#gs_display img{
+	box-shadow: 5pt 5pt 10pt black;
+}
+
+#gs_display table{
+	margin:auto;
+	border-collapse:collapse;
+	border-spacing:0px;
+	border-style:none;
+}
+	
+#gs_control{
+	width:100%;
+	text-align:center;
+	padding-bottom: 10px;
+	/*display:none;*/
+}
+
+#gs_control .color_button{
+	border-radius:50%;
+	/*width:10%;
+	height:100%;*/
+	margin: 0px 5px;
+	border: silver 2pt solid;
+}
+
+#gs_results{
+	height: 30%;
+	background-color:#333;
+	border: white 10pt inset;
+	
+	position: absolute;
+	top:20%;
+
+}
+
+#gs_results #num{
+	font-size:140%;
+}
