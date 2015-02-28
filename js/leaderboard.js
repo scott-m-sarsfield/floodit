@@ -34,7 +34,8 @@ function submitScore(name,score,code){
 			'function':'submit_score',
 			'name':name,
 			'score':score,
-			'code':code
+			'code':code,
+			'solution':window.soln
 	};
 	
 	$.ajax("lb.php",{
@@ -68,15 +69,16 @@ function updateLeaderboard(obj){
 	
 	window.maxScore = 0;
 	
-	for(var i = 0; i < obj["leaders"].length; i++){
+	for(var i = 0; i < 10; i++){
 		var o = obj["leaders"][i];
+		if(!o){ window.maxScore = 100; continue;}
 		var x = $(".sora_leaderboard #row"+i);
-		x.children(".rank").text( o.rank );
+		x.children(".rank").text( (i+1) );
 		x.children(".name").text( o.name );
 		x.children(".score").text( o.score );
 		
 		if( o.score == ""){ window.maxScore = 100; }
-		if( parseInt(o.score) > maxScore ){ window.maxScore = o.score; }
+		if( parseInt(o.score) > maxScore ){ window.maxScore = parseInt(o.score); }
 	}
 	
 }

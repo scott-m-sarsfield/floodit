@@ -35,6 +35,9 @@ var activeKeys = true;
 // Score
 var nTurns;
 
+// Solution
+var soln = new Array();
+
 // Score of highest leaderboard scorer. 
 var maxScore,HighScoreForm;
 
@@ -113,7 +116,7 @@ function startGame(){
 
 	initialize();
 
-	display();
+	//display();
 	
 	return;
 }
@@ -125,27 +128,50 @@ function startGame(){
 // Function: Initializes game variables / environment.
 //
 function initialize(){
+	
+	$.ajax("lb.php",{
+		type:"POST",
+		data:{"function":"new_game"},
+		statusCode:{
+			200:function(data,status,jqXHR){
+				var json = JSON.parse(data);
+				console.log(json);
+				
+				window.GameID = json["code"];
+				Map = json["map"];
+				
+				for(var i = 0; i < dimx*dimy; i++){
+					Act[i] = 0;
+				}
+				
+				
+				nTurns = -1;
+				nAct = 0;
+
+				init_table();	 // constructs table
+				init_buttons();  // constructs buttons
+
+				makeActive(0);   // activates top-left corner
+
+				update(Map[0]);  // checks the area around origin
+						 // for same-colored cells, and activates them
+						 
+				display();
+			}
+		}
+	});
 
 	// Initialize the flood grid.
 	// 	* Randomly Assigned Color
 	// 	* Inactive
+	/*
 	for(i = 0; i < dimy; i++)
 		for(j = 0; j < dimx; j++){
 			var pos = i*dimx + j;
 			Map[pos] = rand(0,nColors-1);
 			Act[pos] = 0;
 		}
-
-	nTurns = -1;
-	nAct = 0;
-
-	init_table();	 // constructs table
-	init_buttons();  // constructs buttons
-
-	makeActive(0);   // activates top-left corner
-
-	update(Map[0]);  // checks the area around origin
-			 // for same-colored cells, and activates them
+	*/
 
 
 	return;
@@ -268,6 +294,9 @@ function update(chosen){
 
 	// Increment the number of turns.
 	nTurns++;
+	
+	// Update solution.
+	soln.push(chosen);
 
 	// Update the display.
 	display();

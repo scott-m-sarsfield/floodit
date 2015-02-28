@@ -5,7 +5,7 @@
 
 $nLeaders = 10;
 $Leaders;
-$LeaderFile = "leaders.json";
+$LeaderFile = "data/leaders.json";
 
 
 //------------------------------------------------------
@@ -133,12 +133,21 @@ function submitScore(){
 	foreach($Leaders as $lead){
 		if($lead->code == $candidate->code) $good = false;
 	}
+	
+	$candidate->score = verifySolution( $candidate->code, $_POST["solution"]);
+	
+	// Score minimum. (for now)
+	if($candidate->score < 0) $good = false;
+	
+	
 	if ($good) $Leaders[$nLeaders-1] = $candidate;
 	
 	saveLeaders();
 	
 }
 
+// GAME MANAGEMENT
+include "game.php";
 
 //------------------------------------------------------
 // FUNCTION DIRECTORY
@@ -147,6 +156,7 @@ $function = "";
 
 if(isset($_POST['function'])){ $function = $_POST['function']; }
 
+if($function == "new_game") newGame();
 if($function == 'get_leaders'){	getLeaders(); }
 if($function == 'submit_score'){ submitScore(); }
 

@@ -55,7 +55,6 @@
 	</div></div>
 	
 	<script>
-		window.GameID = <?php echo rand(); ?>;
 		$(document).ready(function(){
 			$("#leaderboard #rankings").append( renderLeaderboard() );
 		});
