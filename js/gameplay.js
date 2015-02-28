@@ -90,6 +90,9 @@ function setDimX(x){
 // Function: Launches the game.
 //
 function launchGame(){
+	var x = new GameWindow();
+	x.generate();
+	/*
 	$("body").append(
 		$("<div />",{id:"gamescreen"}).append(
 			$("<div />",{id:"gs_display"}),
@@ -97,7 +100,7 @@ function launchGame(){
 			$("<div />",{id:"counter"})
 		)
 	);
-	
+	*/
 	startGame();
 }
 
@@ -208,10 +211,15 @@ function init_table(){
 
 	// Cell Size
 	// 	* Fill width with 'dimx' squares.
-	var horz = 0.75*$("#gamescreen").height();$("#gamescreen").css("padding-top","5%");
-	var bSize = Math.floor(parseInt(horz) / dimx);  
-	$('#gs_display td').css('width',bSize+'px');
-	$('#gs_display td').css('height',bSize+'px');
+	function resizeTable(){
+		var horz = 0.75*$("#gamescreen").height();$("#gamescreen").css("padding-top","5%");
+		var bSize = Math.floor(parseInt(horz) / dimx);  
+		$('#gs_display td').css('width',bSize+'px');
+		$('#gs_display td').css('height',bSize+'px');
+	}
+	resizeTable();
+	
+	$(window).resize(resizeTable);
 
 	// Border
 	$('#gs_display td').css('border-style','solid');
@@ -242,11 +250,15 @@ function init_buttons(){
 
 	// Width
 	// 	* Buttons should fill about 1/2 the width.
-	var x = $('#gs_control').css('width');
-	var x2 = Math.floor(parseInt(x) / (2*nColors));
+	function resizeButtons(){
+		var x = $('#gs_control').css('width');
+		var x2 = Math.floor(parseInt(x) / (2*nColors));
 
-	$('.color_button').css('height',x2+'px');
-	$('.color_button').css('width',x2+'px');
+		$('.color_button').css('height',x2+'px');
+		$('.color_button').css('width',x2+'px');
+	}
+	resizeButtons();
+	$(window).resize(resizeButtons);
 
 	$('#counter').show();
 	
@@ -422,7 +434,7 @@ function endGame(){
 	
 	var x = $("#gs_results");
 	
-	x.append( $("<br />"),
+	x.append(
 				$("<h1 />",{text:"You Win!"}),
 				$("<br />"),
 				$("<h2 />",{text:"It took you "+nTurns+" turns."})
@@ -432,7 +444,7 @@ function endGame(){
 	// High Score Option
 	if(nTurns < maxScore){
 			
-		var HighScoreForm = $("<div />");
+		var HighScoreForm = $("<div />",{class:"gs_submit_form"});
 		
 		HighScoreForm.append($("<input />",{type:'text',id:'person'}));
 		HighScoreForm.append($("<input />",{type:'hidden',id:"user_score",value:nTurns}));
@@ -449,15 +461,6 @@ function endGame(){
 		activeKeys = false;
 	}
 	
-
-	// Establish Margins of the Results div.
-	var x = parseInt($('#gs_display').css('width'));
-	
-	// Div will take 75% of the display panel.
-	x = Math.floor(0.25*x/2);
-	
-	$('#gs_results').css('left',x+'px');
-	$('#gs_results').css('right',x+'px');
 }
 
 // LEEEEEROOOOOYY  JEEEEEEEEEENNNNNKIIIIIINNNNSS
