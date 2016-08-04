@@ -1,13 +1,13 @@
 #gamescreen{
 	background-color:#000;
-	background-image:url('/~ssarsfie/sherlock/img/gs_sher_back.png');
+	background-image:url('../img/lib/gs_sher_back.png');
 	background-repeat:repeat;
 	background-position:center;
 }
 
 #gamescreen *{
 	overflow:hidden;
-	
+
 	-webkit-touch-callout:none;
 	-webkit-user-select:none;
 	-khtml-user-select:none;
@@ -16,7 +16,7 @@
 	user-select:none;
 }
 
-#gamescreen #counter{	
+#gamescreen #counter{
 	position:absolute;
 	right:0.5em;
 	top: 0;
@@ -40,7 +40,7 @@
 	width: 100%;
 	text-align:center;
 	padding: 10px 0px;
-	
+
 }
 
 #gs_display{
@@ -63,7 +63,7 @@
 	border-spacing:0px;
 	border-style:none;
 }
-	
+
 #gs_control{
 	width:100%;
 	text-align:center;
@@ -88,7 +88,7 @@
 	text-shadow:none;
 	left:0;
 	right:0;
-	
+
 	position: absolute;
 	top:20%;
 
