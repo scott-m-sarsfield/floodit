@@ -58,7 +58,7 @@
 	<title> Scott Mathias Sarsfield's Web Site </title>
 </head>
 <body>
-	<<div id="main_nav_bar">
+	<div id="main_nav_bar">
 
 		<div class="page-logo">
 			<a href="http://scottmsarsfield.com">
