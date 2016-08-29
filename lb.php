@@ -24,7 +24,7 @@ function writeJSONFile($contents){
 	$worked = file_put_contents($LeaderFile,$str);
 	if(!$worked){ http_response_code(505); }
 	else{ echo $str; }
-	return;	
+	return;
 }
 
 
@@ -35,7 +35,7 @@ function writeJSONFile($contents){
 function getLeaders(){
 	$leaders = readJSONFile();
 	echo json_encode( $leaders );
-	
+
 	return;
 }
 
@@ -63,10 +63,10 @@ function loadLeaders(){
 	$lead_arr = $leaders["leaders"];
 	//print_r($leaders);
 	for($i = 0; $i < $nLeaders; $i++){
-		
+
 		$obj = array("name"=>"","score"=>"","rank"=>$i,"code"=>"");
 		if(isset($lead_arr[$i])){ $obj = $lead_arr[$i]; }
-		
+
 		$Leaders[$i] = new leader(
 						$obj["name"],
 						$obj["score"],
@@ -91,7 +91,7 @@ function saveLeaders(){
 	global $Leaders,$nLeaders;
 
 	uasort($Leaders,'cmpScore');
-	
+
 	$saveObj = array();
 	$saveObj["leaders"] = array();
 
@@ -105,7 +105,7 @@ function saveLeaders(){
 	}
 
 	unset($Leaders);
-	
+
 	writeJSONFile($saveObj);
 
 	loadLeaders();
@@ -119,31 +119,35 @@ function worstScore(){
 
 function submitScore(){
 	global $Leaders,$nLeaders;
-	
+
 	$candidate = new leader(
 					$_POST['name'],
 					$_POST['score'],
 					11,
 					$_POST['code']);
-					
+
 	loadLeaders();
-	
+
 	// Check unique code.
-	$good = true;	
+	$good = true;
 	foreach($Leaders as $lead){
 		if($lead->code == $candidate->code) $good = false;
 	}
-	
+
 	$candidate->score = verifySolution( $candidate->code, $_POST["solution"]);
-	
+
 	// Score minimum. (for now)
 	if($candidate->score < 0) $good = false;
-	
-	
-	if ($good) $Leaders[$nLeaders-1] = $candidate;
-	
+
+
+	if ($good){
+		 $Leaders[$nLeaders-1] = $candidate;
+	}else{
+		http_response_code(400);
+	}
+
 	saveLeaders();
-	
+
 }
 
 // GAME MANAGEMENT

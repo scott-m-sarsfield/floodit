@@ -54,6 +54,10 @@ function submitScore(name,score,code){
 				$("#gamescreen").remove();
 				window.GameID++;
 			},
+			400:function(){
+				alert("Invalid game.  Unable to reproduce solution");
+				$("#gamescreen").remove();
+			},
 			505:function(){
 				alert("Save Failed.");
 				$("#gamescreen").remove();
